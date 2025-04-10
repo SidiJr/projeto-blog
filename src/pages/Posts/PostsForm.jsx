@@ -1,9 +1,28 @@
-import React from 'react'
+import React from "react";
+import { FormProvider } from "../../contexts/FormContext";
+import Form from "../../components/Form/Form";
 
 const PostsForm = () => {
-  return (
-    <div>PostsForm</div>
-  )
-}
+  const fields = [
+    {
+      name: "titulo",
+      type: "text",
+      label: "Título",
+      required: true,
+    },
+    {
+      name: "conteudo",
+      type: "text",
+      label: "Conteúdo",
+      required: true,
+    },
+  ];
 
-export default PostsForm
+  return (
+    <FormProvider>
+      <Form fields={fields} title={"Post"} />
+    </FormProvider>
+  );
+};
+
+export default PostsForm;
