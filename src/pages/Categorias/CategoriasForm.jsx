@@ -2,7 +2,7 @@ import React from "react";
 import { FormProvider } from "../../contexts/FormContext";
 import Form from "../../components/Form/Form";
 
-const PostsForm = () => {
+const CategoriasForm= () => {
   const fields = [
     {
       name: "categoria",
@@ -25,4 +25,4 @@ const PostsForm = () => {
   );
 };
 
-export default PostsForm;
+export default CategoriasForm;

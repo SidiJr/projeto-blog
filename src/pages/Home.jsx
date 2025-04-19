@@ -1,19 +1,23 @@
 import React from "react";
-import Button from "../components/Constructor/Button";
+import { SubTitle, Title } from "../components/Constructor/Texts";
+import Container from "../components/Constructor/Container";
+import { BookOpen, FileText, User } from "lucide-react";
 
 function Home() {
   return (
-    <main className="flex-grow flex min-h-screen">
-      <div className="container mx-auto text-center grid grid-cols-2 max-h-48 mt-20">
-        <div className="m-2 grid grid-rows-2 gap-3">
-          <Button href="posts" children="Listar Posts" />
-          <Button href="posts/form" children="Novo Post" />
-        </div>
-        <div className="m-2 grid grid-rows-2 gap-3">
-          <Button href="categories" children="Listar Categorias" />
-          <Button href="categories/form" children="Nova Categoria" />
-        </div>
-      </div>
+    <main className="flex-grow min-h-screen bg-gray-100 p-6 flex flex-col items-center">
+      {/* Primeira seção - Título e Subtítulo ocupando toda a largura */}
+      <section className="mb-10 w-full text-center">
+        <Title title="Painel de Administração" />
+        <SubTitle subtitle="Gerencie seus posts, categorias e autores de forma rápida e prática." />
+      </section>
+
+      {/* Segunda seção - Containers lado a lado em telas grandes e empilhados em telas pequenas */}
+      <section className="w-full flex flex-wrap justify-center gap-6">
+        <Container type="posts" icon={BookOpen} />
+        <Container type="categorias" icon={FileText} />
+        <Container type="autores" icon={User} />
+      </section>
     </main>
   );
 }
