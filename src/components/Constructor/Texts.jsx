@@ -17,11 +17,15 @@
 // Link/Ação secundária: text-indigo-500, hover:text-indigo-700
 
 export const Title = ({ title }) => {
-  return <h1 className="text-4xl font-bold text-gray-800 p-4">{title}</h1>;
+  return (
+    <h1 className="text-4xl font-bold text-gray-800 p-4 capitalize">{title}</h1>
+  );
 };
 
-export const SubTitle = ({subtitle}) => {
-  return <p className="text-lg  text-gray-600 mt-2 p-2">{subtitle}</p>;
+export const SubTitle = ({ subtitle }) => {
+  return (
+    <p className="text-lg  text-gray-600 mt-2 p-2">{subtitle}</p>
+  );
 };
 
 export const Text = ({ text }) => {

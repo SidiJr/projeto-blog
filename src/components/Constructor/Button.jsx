@@ -9,6 +9,8 @@ const Button = ({ href, onClick, children, className }) => {
         "bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400",
         "flex justify-center items-center",
         "active:scale-95",
+        "hover:cursor-pointer",
+        "capitalize",
         className
       ),
     [className]

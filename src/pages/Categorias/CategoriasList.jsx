@@ -1,7 +1,9 @@
-import React from "react";
+import List from "../../components/List/List";
 
-const CategoriasList = () => {
-  return <div>CategoriesList</div>;
+const ListLocacoes = () => {
+  const fields = ["id", "nome"];
+
+  return <List type="categorias" fields={fields} />;
 };
 
-export default CategoriasList;
+export default ListLocacoes;

@@ -14,7 +14,7 @@ const Navbar = () => {
         <div className="flex gap-4">
           <NavLink text="Home" href="/" />
           <NavLink text="Posts" href="/posts" />
-          <NavLink text="Categorias" href="/categories" />
+          <NavLink text="Categorias" href="/categorias" />
           <NavLink text="Autores" href="/autores" />
         </div>
       </div>
