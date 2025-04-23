@@ -1,21 +1,11 @@
 import React from "react";
+import { Text } from "./Texts";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-800 text-white py-6">
+    <footer className="bg-gray-800 text-white py-6 min-h-36 flex items-center">
       <div className="container mx-auto text-center">
-        <p>&copy; 2025 Minha Empresa. Todos os direitos reservados.</p>
-        <div className="mt-4">
-          <a href="#" className="text-blue-400 hover:text-blue-600 mx-2">
-            Facebook
-          </a>
-          <a href="#" className="text-blue-400 hover:text-blue-600 mx-2">
-            Twitter
-          </a>
-          <a href="#" className="text-blue-400 hover:text-blue-600 mx-2">
-            Instagram
-          </a>
-        </div>
+        <Text text="&copy; 2025 Gerencie seu blog. Todos os direitos reservados."/>
       </div>
     </footer>
   );

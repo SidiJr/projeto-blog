@@ -1,9 +1,11 @@
-import React from 'react'
+import React from "react";
+import List from "../../components/List/List";
 
 const PostsList = () => {
-  return (
-    <div>PostList</div>
-  )
-}
+  const fields = ["titulo"];
+  const extraParams = ["Título"];
 
-export default PostsList
+  return <List type="posts" fields={fields} extraParams={extraParams} />;
+};
+
+export default PostsList;

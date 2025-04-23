@@ -2,17 +2,17 @@ import React from "react";
 import { FormProvider } from "../../contexts/FormContext";
 import Form from "../../components/Form/Form";
 
-const CategoriasForm= () => {
+const CategoriasForm = () => {
   const fields = [
     {
-      name: "categoria",
+      name: "nome",
       type: "text",
-      label: "Categoria",
+      label: "Nome",
       required: true,
     },
     {
       name: "descricao",
-      type: "text",
+      type: "textarea",
       label: "Descrição",
       required: true,
     },
@@ -20,7 +20,7 @@ const CategoriasForm= () => {
 
   return (
     <FormProvider>
-      <Form fields={fields} title={"Post"} />
+      <Form fields={fields} type={"categorias"} />
     </FormProvider>
   );
 };

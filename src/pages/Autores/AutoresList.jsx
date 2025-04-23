@@ -1,9 +1,10 @@
-import React from 'react'
+import React from "react";
+import List from "../../components/List/List";
 
 const AutoresList = () => {
-  return (
-    <div>AutoresList</div>
-  )
-}
+  const fields = ["nome"];
 
-export default AutoresList
+  return <List type="autores" fields={fields} />;
+};
+
+export default AutoresList;

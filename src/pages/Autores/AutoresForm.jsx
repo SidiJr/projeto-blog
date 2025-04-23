@@ -4,23 +4,23 @@ import Form from "../../components/Form/Form";
 
 const AutoresForm = () => {
   const fields = [
-    // {
-    //   name: "categoria",
-    //   type: "text",
-    //   label: "Categoria",
-    //   required: true,
-    // },
-    // {
-    //   name: "descricao",
-    //   type: "text",
-    //   label: "Descrição",
-    //   required: true,
-    // },
+    {
+      name: "nome",
+      type: "text",
+      label: "Nome",
+      required: true,
+    },
+    {
+      name: "email",
+      type: "text",
+      label: "E-mail",
+      required: true,
+    },
   ];
 
   return (
     <FormProvider>
-      <Form fields={fields} title={"Autores"} />
+      <Form fields={fields} type={"autores"} />
     </FormProvider>
   );
 };

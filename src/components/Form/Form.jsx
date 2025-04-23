@@ -1,41 +1,79 @@
 import clsx from "clsx";
 import { useForm } from "../../contexts/FormContext";
-import BaseButton from "./Button";
 import Input from "./Input";
-import { Text, Title } from "../Constructor/Texts";
+import { Title } from "../Constructor/Texts";
+import { useRequest } from "../../hooks/useRequest";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import Button from "../Constructor/Button";
 
-// Necessário passar um array de objetos com os fields e a função de submit
-const Form = ({ fields, onSubmit, buttonText, title }) => {
+const Form = ({ fields, type }) => {
+  const { id } = useParams();
   const { formData, updateFormData } = useForm();
+  const { criar, atualizar, buscarPorId } = useRequest(type);
 
+  // Busca os dados iniciais quando for edição
+  useEffect(() => {
+    const buscarDadosPorId = async () => {
+      if (id) {
+        const data = await buscarPorId(id);
+
+        if (data && typeof data === "object") {
+          Object.keys(data).forEach((key) => {
+            updateFormData(key, data[key]);
+          });
+        }
+      }
+    };
+
+    buscarDadosPorId();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Salva o que foi digitado
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    updateFormData(name, value);
+    const { name, type, files, value } = e.target;
+
+    if (type === "file") {
+      updateFormData(name, files[0]);
+    } else {
+      updateFormData(name, value);
+    }
   };
 
-  const handleSubmit = () => {
-    //aqui vai ser enviado os dados para o back
-  };
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-  console.log("formData: ", formData);
+    const enviarDados = async () => {
+      const formPayload = new FormData();
+
+      for (const key in formData) {
+        formPayload.append(key, formData[key]);
+      }
+
+      if (id) {
+        await atualizar(id, formPayload, true);
+      } else {
+        await criar(formPayload, true);
+      }
+    };
+
+    enviarDados();
+  };
 
   return (
-    //Envolve todo o componente
-
-    <section className={clsx("w-full flex flex-col items-center h-screen")}>
-      <Title title={title} />
+    <section className={clsx("w-full flex flex-col items-center min-h-screen bg-gray-100")}>
+      <Title title={type} />
       <form
-        className="w-full flex flex-col items-center"
+        className="w-full flex flex-col items-center pb-20"
         onSubmit={handleSubmit}
       >
-        {/* Envolve os campos */}
         <div
           className={clsx(
-            "flex flex-col border bg-white p-10 gap-4 rounded-md w-3/4"
+            "flex flex-col bg-white rounded-2xl sm:shadow-md  p-10 gap-4  w-full sm:w-3/4 md:w-2/4"
           )}
         >
           {fields.map((field) => (
-            // Envolve cada campo
             <div key={field.name}>
               <Input
                 name={field.name}
@@ -44,14 +82,23 @@ const Form = ({ fields, onSubmit, buttonText, title }) => {
                 onChange={handleChange}
                 required={field.required}
                 label={field.label}
+                id={id}
               />
             </div>
           ))}
-        </div>
 
-        <div className="flex gap-2">
-          <BaseButton text={"Cancelar"} />
-          <BaseButton isForm text={buttonText ?? "Salvar"} />
+          <div className="flex justify-center">
+            <Button
+              color={
+                id
+                  ? "bg-blue-500 hover:bg-blue-700"
+                  : "bg-emerald-500 hover:bg-emerald-700"
+              }
+              isForm
+            >
+              {id ? "Atualizar" : "Salvar"}
+            </Button>
+          </div>
         </div>
       </form>
     </section>
