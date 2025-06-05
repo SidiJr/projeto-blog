@@ -6,6 +6,7 @@ const Routes = () => {
 
   console.log(signed)
 
-  return signed ? <PrivateRoutes /> : <PublicRoutes />;
+  // return signed ? <PrivateRoutes /> : <PublicRoutes />;
+  return <PrivateRoutes />
 };
 export default Routes;
