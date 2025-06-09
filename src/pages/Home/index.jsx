@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Section from "../../components/Base/Section";
 import Sidebar from "../../components/Base/Sidebar";
-import { useAuth } from "../../contexts/auth";
 import api from "../../services/api";
 import { toast } from "react-toastify";
-import Card from "../../components/Base/Card";
 import Loading from "../../components/Base/Loading";
+import Card from "../../components/Post/Card";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Home = () => {
   const { Logout } = useAuth();
@@ -44,6 +44,7 @@ const Home = () => {
               conteudo={post.conteudo}
               imagem={post.imagem}
               data={post.data_criacao}
+              usuario={post.usuario}
             />
           ))
         ) : (

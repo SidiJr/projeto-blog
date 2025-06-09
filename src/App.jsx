@@ -1,15 +1,18 @@
 import React from "react";
 import Routes from "./routes";
-import { AuthProvider } from "./contexts/auth";
 import "./App.css";
 import { ToastContainer } from "react-toastify";
+import { AuthProvider } from "./contexts/AuthContext";
+import { FormProvider } from "./contexts/FormContext";
 
 function App() {
   return (
     <>
       <ToastContainer />
       <AuthProvider>
-        <Routes />
+        <FormProvider>
+          <Routes />
+        </FormProvider>
       </AuthProvider>
     </>
   );

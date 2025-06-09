@@ -1,15 +1,48 @@
-import React from "react";
-import { useAuth } from "../../contexts/auth";
+import { useAuth } from "../../contexts/AuthContext";
+import { FaGlobe } from "react-icons/fa";
+import { SubTitle, Title } from "../../components/Base/Texts";
+import Form from "../../components/Form/Form";
+
 const Login = () => {
-  const context = useAuth();
-  console.log(context);
+  const { Login } = useAuth();
+
   function handleLogin() {
-    context.Login();
+    Login();
   }
+
+  const fields = [
+    {
+      name: "email",
+      type: "text",
+      label: "E-mail",
+      required: true,
+    },
+    {
+      name: "senha",
+      type: "password",
+      label: "Senha",
+      required: true,
+    },
+  ];
+
+  const config = {
+    buttonText: "Entrar",
+  };
+
   return (
-    <div>
-      <button onClick={handleLogin}>Login</button>
+    <div className="flex h-screen">
+      {/* Lado esquerdo - imagem ou destaque */}
+      <div className="w-1/2 bg-blue-500 text-white flex items-center justify-center">
+        <FaGlobe className="text-[12rem]" />
+      </div>
+
+      {/* Lado direito - conteúdo */}
+      <div className="w-1/2 flex flex-col justify-center items-start px-20">
+        <Title>Entre na sua conta</Title>
+        <Form fields={fields} route="/login" config={config} />
+      </div>
     </div>
   );
 };
+
 export default Login;

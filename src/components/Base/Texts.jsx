@@ -1,17 +1,35 @@
-export const Title = ({ title }) => {
+export const Title = ({ children, className = "" }) => {
   return (
-    <h1 className="text-4xl font-bold text-gray-800 p-4 capitalize">{title}</h1>
+    <h1
+      className={`text-4xl font-bold text-gray-800 p-4 capitalize ${className}`}
+    >
+      {children}
+    </h1>
   );
 };
 
-export const SubTitle = ({ subtitle }) => {
-  return <p className="text-lg  text-gray-600 mt-2 p-2">{subtitle}</p>;
+export const SubTitle = ({ children, className = "" }) => {
+  return (
+    <h2 className={`text-2xl font-semibold text-gray-700 p-4 ${className}`}>
+      {children}
+    </h2>
+  );
 };
 
-export const Text = ({ text }) => {
-  return <p className="text-base text-gray-500">{text}</p>;
+export const Paragraph = ({ children, className = "" }) => {
+  return <p className={`text-base text-gray-600 p-4 ${className}`}>{children}</p>;
 };
 
-export const SecondaryText = ({ secondarytext }) => {
-  return <p className="text-base text-white">{secondarytext}</p>;
+export const SecondaryText = ({ children, className = "" }) => {
+  return (
+    <span className={`text-sm text-gray-400 p-4 ${className}`}>{children}</span>
+  );
+};
+
+export const HighlightText = ({ children, className = "" }) => {
+  return (
+    <span className={`text-base text-white font-medium p-4 ${className}`}>
+      {children}
+    </span>
+  );
 };
