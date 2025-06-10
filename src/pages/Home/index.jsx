@@ -5,9 +5,12 @@ import api from "../../services/api";
 import { toast } from "react-toastify";
 import Loading from "../../components/Base/Loading";
 import Card from "../../components/Post/Card";
+import InfoUsuario from "../../components/Usuario/InfoUsuario";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+  const { user } = useAuth();
 
   useEffect(() => {
     api
@@ -24,11 +27,13 @@ const Home = () => {
       });
   }, []);
 
-  console.log(posts);
-
   return (
     <main className="flex justify-center w-full min-h-screen">
-      <Sidebar></Sidebar>
+      <Sidebar>
+        <div className="flex flex-col items-center">
+          <InfoUsuario nome={user?.nome} size="xl" />
+        </div>
+      </Sidebar>
       <Section>
         {posts.length > 0 ? (
           posts.map((post, index) => (
