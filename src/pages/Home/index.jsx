@@ -5,15 +5,9 @@ import api from "../../services/api";
 import { toast } from "react-toastify";
 import Loading from "../../components/Base/Loading";
 import Card from "../../components/Post/Card";
-import { useAuth } from "../../contexts/AuthContext";
 
 const Home = () => {
-  const { Logout } = useAuth();
   const [posts, setPosts] = useState([]);
-
-  // async function handleLogout() {
-  //   Logout();
-  // }
 
   useEffect(() => {
     api

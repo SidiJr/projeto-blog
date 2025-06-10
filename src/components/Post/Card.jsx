@@ -37,7 +37,7 @@ const Card = ({ titulo, conteudo, imagem, data, usuario }) => {
           )}
         >
           <h2 className="text-lg font-semibold">{titulo}</h2>
-          <InfoUsuario nome={usuario.nome} />
+          <InfoUsuario nome={usuario?.nome} />
         </div>
       </div>
 

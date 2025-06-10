@@ -1,7 +1,6 @@
 import clsx from "clsx";
-import React, { useEffect, useState } from "react";
 
-const Input = ({ label, type, name, value, onChange, required, id }) => {
+const Input = ({ label, type, name, value, onChange, required}) => {
   const inputClass = [
     "border border-neutral-300 rounded-md w-full py-3 px-4 text-gray-700 placeholder-gray-400",
     "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",

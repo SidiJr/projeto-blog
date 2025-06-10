@@ -1,13 +1,26 @@
-import { useParams } from "react-router-dom";
 import { useForm } from "../../contexts/FormContext";
 import Input from "./Input";
 import Button from "../Base/Button";
-import api from "../../services/api";
-import { toast } from "react-toastify";
+import { useAuth } from "../../contexts/AuthContext";
 
-const Form = ({ fields, route, config }) => {
-  const { id } = useParams();
+const fields = [
+  {
+    name: "email",
+    type: "text",
+    label: "E-mail",
+    required: true,
+  },
+  {
+    name: "senha",
+    type: "password",
+    label: "Senha",
+    required: true,
+  },
+];
+
+const FormLogin = () => {
   const { formData, updateFormData } = useForm();
+  const { handleLogin } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -15,19 +28,9 @@ const Form = ({ fields, route, config }) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-
-    api
-      .post(route, formData)
-      .then((response) => {
-        toast.success(response.data.message);
-      })
-      .catch((error) => {
-        toast.error(error.response.data.message)
-      });
+    handleLogin(e, formData);
   };
 
-  console.log(formData);
   return (
     <section className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
@@ -40,23 +43,16 @@ const Form = ({ fields, route, config }) => {
               onChange={handleChange}
               required={field.required}
               label={field.label}
-              id={id}
             />
           </div>
         ))}
 
         <div className="flex justify-center">
-          <Button isForm>
-            {config.buttonText
-              ? config.buttonText
-              : id
-                ? "Atualizar"
-                : "Salvar"}
-          </Button>
+          <Button isForm>Entrar</Button>
         </div>
       </form>
     </section>
   );
 };
 
-export default Form;
+export default FormLogin;
