@@ -1,20 +1,19 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from "react";
 
 const FormContext = createContext();
 
 export const FormProvider = ({ children }) => {
-
   const [formData, setFormData] = useState({});
 
   const updateFormData = (field, value) => {
-    setFormData(prevData => ({
+    setFormData((prevData) => ({
       ...prevData,
-      [field]: value
+      [field]: value,
     }));
   };
 
   return (
-    <FormContext.Provider value={{ formData, updateFormData }}>
+    <FormContext.Provider value={{ formData, updateFormData, setFormData }}>
       {children}
     </FormContext.Provider>
   );

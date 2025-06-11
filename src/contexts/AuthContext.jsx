@@ -6,25 +6,28 @@ const AuthContext = createContext({});
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [showLogin, setShowLogin] = useState(true);
 
   async function handleLogin(e, formData) {
     e.preventDefault();
 
     try {
       const response = await api.post("/login", formData);
-      console.log("resposta:", response);
 
-      if (response.data.status === 200) {
+      if ([200, 201].includes(response.data.status)) {
         setUser(response.data.data);
         api.defaults.headers.Authorization = `Bearer ${response.data.token}`;
         localStorage.setItem("@App:user", JSON.stringify(response.data.data));
         localStorage.setItem("@App:accessToken", response.data.token);
         toast.success(response.data.message);
+        return "success";
       } else {
         toast.error(response.data.message);
+        return "error";
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Erro ao fazer login");
+      return "error";
     }
   }
 
@@ -45,7 +48,14 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ signed: Boolean(user), user, handleLogin, handleLogout }}
+      value={{
+        signed: Boolean(user),
+        user,
+        handleLogin,
+        handleLogout,
+        showLogin,
+        setShowLogin,
+      }}
     >
       {children}
     </AuthContext.Provider>

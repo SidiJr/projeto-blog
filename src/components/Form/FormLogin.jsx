@@ -9,17 +9,19 @@ const fields = [
     type: "text",
     label: "E-mail",
     required: true,
+    placeholder: "Digite seu e-mail",
   },
   {
     name: "senha",
     type: "password",
     label: "Senha",
     required: true,
+    placeholder: "Digite sua senha",
   },
 ];
 
 const FormLogin = () => {
-  const { formData, updateFormData } = useForm();
+  const { formData, updateFormData, setFormData } = useForm();
   const { handleLogin } = useAuth();
 
   const handleChange = (e) => {
@@ -27,8 +29,11 @@ const FormLogin = () => {
     updateFormData(name, value);
   };
 
-  const handleSubmit = (e) => {
-    handleLogin(e, formData);
+  const handleSubmit = async (e) => {
+    const response = await handleLogin(e, formData);
+    if(response === "success"){
+      setFormData({});
+    }
   };
 
   return (
@@ -43,6 +48,7 @@ const FormLogin = () => {
               onChange={handleChange}
               required={field.required}
               label={field.label}
+              placeholder={field.placeholder}
             />
           </div>
         ))}

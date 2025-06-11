@@ -7,10 +7,11 @@ import Loading from "../../components/Base/Loading";
 import Card from "../../components/Post/Card";
 import InfoUsuario from "../../components/Usuario/InfoUsuario";
 import { useAuth } from "../../contexts/AuthContext";
+import Button from "../../components/Base/Button";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
-  const { user } = useAuth();
+  const { user, handleLogout } = useAuth();
 
   useEffect(() => {
     api
@@ -50,7 +51,9 @@ const Home = () => {
           <Loading />
         )}
       </Section>
-      <Sidebar></Sidebar>
+      <Sidebar>
+        <Button onClick={handleLogout}>Logout</Button>
+      </Sidebar>
     </main>
   );
 };

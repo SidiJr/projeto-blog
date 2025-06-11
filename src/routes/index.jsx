@@ -4,9 +4,6 @@ import { useAuth } from "../contexts/AuthContext";
 const Routes = () => {
   const { signed } = useAuth();
 
-  console.log(signed)
-
   return signed ? <PrivateRoutes /> : <PublicRoutes />;
-  // return <PrivateRoutes />
 };
 export default Routes;
