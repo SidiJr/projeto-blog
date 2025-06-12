@@ -4,14 +4,19 @@ import Sidebar from "../../components/Base/Sidebar";
 import api from "../../services/api";
 import { toast } from "react-toastify";
 import Loading from "../../components/Base/Loading";
-import Card from "../../components/Post/Card";
-import InfoUsuario from "../../components/Usuario/InfoUsuario";
 import { useAuth } from "../../contexts/AuthContext";
 import Button from "../../components/Base/Button";
+import FormPost from "../Post/FormPost";
+import Modal from "../../components/Modal/Modal";
+import { useModal } from "../../contexts/ModalContext";
+import CategoriasList from "../Categoria/CategoriasList";
+import InfoUsuario from "../Usuario/InfoUsuario";
+import Card from "../Post/Card";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const { user, handleLogout } = useAuth();
+  const { setIsOpen } = useModal();
 
   useEffect(() => {
     api
@@ -33,10 +38,14 @@ const Home = () => {
       <Sidebar>
         <div className="flex flex-col items-center">
           <InfoUsuario nome={user?.nome} size="xl" />
+          <CategoriasList />
         </div>
       </Sidebar>
       <Section>
-        {posts.length > 0 ? (
+        <div className="flex justify-center">
+          <Button onClick={() => setIsOpen(true)}>Novo Post</Button>
+        </div>
+        {posts?.length > 0 ? (
           posts.map((post, index) => (
             <Card
               key={index}
@@ -54,6 +63,9 @@ const Home = () => {
       <Sidebar>
         <Button onClick={handleLogout}>Logout</Button>
       </Sidebar>
+      <Modal title="Novo Post">
+        <FormPost />
+      </Modal>
     </main>
   );
 };
