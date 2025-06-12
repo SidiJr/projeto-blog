@@ -5,7 +5,7 @@ import Button from "../Base/Button";
 import api from "../../services/api";
 import { toast } from "react-toastify";
 
-const Form = ({ fields, route, redirectTo, onSuccess }) => {
+const Form = ({ fields, route, redirectTo, onSuccess, extraParams }) => {
   const { id } = useParams();
   const { formData, updateFormData, setFormData } = useForm();
   const method = id ? "put" : "post";
@@ -21,6 +21,10 @@ const Form = ({ fields, route, redirectTo, onSuccess }) => {
     e.preventDefault();
 
     try {
+      if (extraParams) {
+        extraParams();
+      }
+
       const response = await api[method](url, formData);
 
       if ([200, 201].includes(response?.data?.status)) {
@@ -43,7 +47,7 @@ const Form = ({ fields, route, redirectTo, onSuccess }) => {
   };
 
   return (
-    <section className="w-full max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <section className="w-full max-w-2xl mx-auto p-6 bg-white">
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {fields.map((field) => (
           <div key={field.name} className="w-full">

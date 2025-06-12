@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../../services/api";
 import { toast } from "react-toastify";
-import Loading from "../../components/Base/Loading";
+import Loading from "../Base/Loading";
 import CategoriaItem from "./CategoriaItem";
 
 const CategoriasList = () => {
@@ -23,13 +23,15 @@ const CategoriasList = () => {
   }, []);
 
   return (
-    <div>
+    <section className="w-full my-4">
       {categorias?.length > 0 ? (
-        categorias.map((categoria, index) => <CategoriaItem />)
+        categorias.map((categoria, index) => (
+          <CategoriaItem key={index} nome={categoria.nome} />
+        ))
       ) : (
         <Loading />
       )}
-    </div>
+    </section>
   );
 };
 

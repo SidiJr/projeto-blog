@@ -9,12 +9,13 @@ import Button from "../../components/Base/Button";
 import FormPost from "../Post/FormPost";
 import Modal from "../../components/Modal/Modal";
 import { useModal } from "../../contexts/ModalContext";
-import CategoriasList from "../Categoria/CategoriasList";
-import InfoUsuario from "../Usuario/InfoUsuario";
-import Card from "../Post/Card";
+import Card from "../../components/Post/Card";
+import InfoUsuario from "../../components/Usuario/InfoUsuario";
+import CategoriasList from "../../components/Categoria/CategoriasList";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
+  const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
   const { user, handleLogout } = useAuth();
   const { setIsOpen } = useModal();
 

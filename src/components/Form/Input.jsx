@@ -12,7 +12,7 @@ const Input = ({
   id
 }) => {
   const inputClass = clsx(
-    "border border-neutral-300 rounded-md w-full py-3 px-4 text-gray-700 placeholder-gray-400",
+    "border border-neutral-300 rounded-md w-full py-1 px-4 text-gray-700 placeholder-gray-400",
     "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500",
     "hover:shadow-md hover:border-blue-400"
   );

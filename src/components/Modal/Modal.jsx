@@ -6,12 +6,12 @@ import { useForm } from "../../contexts/FormContext";
 
 const Modal = ({ title, children }) => {
   const { isOpen, setIsOpen } = useModal();
-  const {setFormData} = useForm();
+  const { setFormData } = useForm();
 
   const handleClose = () => {
     setIsOpen(false);
     setFormData({});
-  }
+  };
 
   if (!isOpen) return null;
 
@@ -21,7 +21,7 @@ const Modal = ({ title, children }) => {
       onClick={handleClose}
     >
       <div
-        className="bg-white rounded p-4 max-w-md w-full relative"
+        className="bg-white rounded p-4 w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl mx-auto relative overflow-y-auto max-h-[90vh]"
         onClick={(e) => e.stopPropagation()}
       >
         <header className="mb-4 border-b pb-2 flex justify-between items-center">
