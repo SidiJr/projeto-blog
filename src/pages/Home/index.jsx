@@ -1,69 +1,60 @@
-import React, { useEffect, useState } from "react";
 import Section from "../../components/Base/Section";
 import Sidebar from "../../components/Base/Sidebar";
-import api from "../../services/api";
-import { toast } from "react-toastify";
-import Loading from "../../components/Base/Loading";
 import { useAuth } from "../../contexts/AuthContext";
 import Button from "../../components/Base/Button";
 import FormPost from "../Post/FormPost";
 import Modal from "../../components/Modal/Modal";
 import { useModal } from "../../contexts/ModalContext";
-import Card from "../../components/Post/Card";
 import InfoUsuario from "../../components/Usuario/InfoUsuario";
-import CategoriasList from "../../components/Categoria/CategoriasList";
+import { useInitialData } from "../../hooks/useInitialData";
+import { useData } from "../../contexts/DataContext";
+import PostList from "../../components/Post/PostList";
+import CategoriaList from "../../components/Categoria/CategoriaList";
+import { useState } from "react";
 
 const Home = () => {
-  const [posts, setPosts] = useState([]);
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState(null);
   const { user, handleLogout } = useAuth();
   const { setIsOpen } = useModal();
+  const [categoriaAtiva, setCategoriaAtiva] = useState(null);
+  const routes = [
+    { route: "posts", params: { categoriaId: categoriaAtiva }},
+    { route: "categorias" },
+  ];
+  useInitialData(routes, categoriaAtiva);
+  const { data } = useData();
 
-  useEffect(() => {
-    api
-      .get("/posts")
-      .then((response) => {
-        if (response.data.status === 200) {
-          setPosts(response.data.data);
-        } else {
-          toast.error(response.data.message);
-        }
-      })
-      .catch((error) => {
-        toast.error(error);
-      });
-  }, []);
+  const handleClickCategoria = (id) => {
+    setCategoriaAtiva(id);
+  };
 
   return (
     <main className="flex justify-center w-full min-h-screen">
+      {/* Sidebar esquerda */}
       <Sidebar>
         <div className="flex flex-col items-center">
           <InfoUsuario nome={user?.nome} size="xl" />
-          <CategoriasList />
+          <CategoriaList
+            categorias={data?.categorias}
+            onClickCategoria={handleClickCategoria}
+            categoriaAtiva={categoriaAtiva}
+          />
         </div>
       </Sidebar>
+
+      {/* Sessão central */}
       <Section>
         <div className="flex justify-center">
           <Button onClick={() => setIsOpen(true)}>Novo Post</Button>
         </div>
-        {posts?.length > 0 ? (
-          posts.map((post, index) => (
-            <Card
-              key={index}
-              titulo={post.titulo}
-              conteudo={post.conteudo}
-              imagem={post.imagem}
-              data={post.data_criacao}
-              usuario={post.usuario}
-            />
-          ))
-        ) : (
-          <Loading />
-        )}
+        <PostList posts={data?.posts} />
       </Section>
+
+      {/* Sidebar direita */}
       <Sidebar>
         <Button onClick={handleLogout}>Logout</Button>
       </Sidebar>
+
+      {/* Componente de modal */}
       <Modal title="Novo Post">
         <FormPost />
       </Modal>

@@ -2,17 +2,25 @@ import { useEffect, useState } from "react";
 import { UPLOADS_URL } from "../../services/api";
 import InfoUsuario from "../Usuario/InfoUsuario";
 
-const Card = ({ titulo, conteudo, imagem, data, usuario }) => {
+const PostCard = ({ titulo, conteudo, imagem, data, usuario, id }) => {
   const [file, setFile] = useState(null);
   const [fileStatus, setFileStatus] = useState("");
 
   useEffect(() => {
     if (imagem) {
       setFile(`${UPLOADS_URL}${imagem}`);
+      setFileStatus("");
+    } else {
+      setFile(null);
+      setFileStatus("");
     }
   }, [imagem]);
 
-  const hasImage = !(fileStatus === "error" || !file);
+  const hasImage = file && fileStatus !== "error";
+
+  if (id === 6) {
+    console.log(hasImage, fileStatus, file);
+  }
 
   const formatDate = (date) => {
     const dateObj = new Date(date);
@@ -30,7 +38,6 @@ const Card = ({ titulo, conteudo, imagem, data, usuario }) => {
 
   return (
     <div className="w-full bg-white border-t border-gray-200 p-4 hover:bg-gray-50 transition cursor-pointer">
-      
       <div className="flex justify-between items-start">
         <InfoUsuario nome={usuario?.nome} size="md" />
         <span className="text-xs text-gray-500">{formatDate(data)}</span>
@@ -59,4 +66,4 @@ const Card = ({ titulo, conteudo, imagem, data, usuario }) => {
   );
 };
 
-export default Card;
+export default PostCard;
