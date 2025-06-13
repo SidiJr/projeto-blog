@@ -1,6 +1,7 @@
 import React from "react";
 import PostCard from "./PostCard";
 import Loading from "../Base/Loading";
+import NoData from "../Base/NoData";
 
 const PostList = ({ posts }) => {
   return (
@@ -17,6 +18,8 @@ const PostList = ({ posts }) => {
             id={post.id}
           />
         ))
+      ) : posts?.length === 0 ? (
+        <NoData />
       ) : (
         <Loading />
       )}

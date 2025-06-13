@@ -18,9 +18,6 @@ const PostCard = ({ titulo, conteudo, imagem, data, usuario, id }) => {
 
   const hasImage = file && fileStatus !== "error";
 
-  if (id === 6) {
-    console.log(hasImage, fileStatus, file);
-  }
 
   const formatDate = (date) => {
     const dateObj = new Date(date);

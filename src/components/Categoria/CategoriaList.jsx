@@ -1,4 +1,5 @@
 import Loading from "../Base/Loading";
+import NoData from "../Base/NoData";
 import CategoriaItem from "./CategoriaItem";
 
 const CategoriaList = ({ categorias, onClickCategoria, categoriaAtiva }) => {
@@ -10,7 +11,7 @@ const CategoriaList = ({ categorias, onClickCategoria, categoriaAtiva }) => {
         onClickCategoria={onClickCategoria}
         isActive={categoriaAtiva === null}
       />
-      {categorias?.length > 0 ? (
+      {categorias?.length > 0 &&
         categorias.map((categoria, index) => (
           <CategoriaItem
             key={index}
@@ -19,10 +20,7 @@ const CategoriaList = ({ categorias, onClickCategoria, categoriaAtiva }) => {
             onClickCategoria={onClickCategoria}
             isActive={categoriaAtiva === categoria.id}
           />
-        ))
-      ) : (
-        <Loading />
-      )}
+        ))}
     </section>
   );
 };

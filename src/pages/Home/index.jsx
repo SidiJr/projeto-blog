@@ -38,6 +38,7 @@ const Home = () => {
             onClickCategoria={handleClickCategoria}
             categoriaAtiva={categoriaAtiva}
           />
+          <Button onClick={handleLogout}>Logout</Button>
         </div>
       </Sidebar>
 
@@ -51,7 +52,6 @@ const Home = () => {
 
       {/* Sidebar direita */}
       <Sidebar>
-        <Button onClick={handleLogout}>Logout</Button>
       </Sidebar>
 
       {/* Componente de modal */}
