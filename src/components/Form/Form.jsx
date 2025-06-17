@@ -4,6 +4,8 @@ import Input from "./Input";
 import Button from "../Base/Button";
 import api from "../../services/api";
 import { toast } from "react-toastify";
+import { useModal } from "../../contexts/ModalContext";
+import { useUpdateData } from "../../hooks/useUpdateData";
 
 const Form = ({ fields, route, redirectTo, onSuccess, extraParams }) => {
   const { id } = useParams();
@@ -11,8 +13,15 @@ const Form = ({ fields, route, redirectTo, onSuccess, extraParams }) => {
   const method = id ? "put" : "post";
   const url = id ? `${route}/${id}` : route;
   const navigate = useNavigate();
+  const { setIsOpen } = useModal();
+  const { fetchAndUpdateData } = useUpdateData();
 
-  const handleChange = (e) => {
+  const handleChange = (e, customChange) => {
+    if (e === null) {
+      updateFormData(customChange.name, customChange.id);
+      return;
+    }
+
     const { name, value } = e.target;
     updateFormData(name, value);
   };
@@ -21,21 +30,23 @@ const Form = ({ fields, route, redirectTo, onSuccess, extraParams }) => {
     e.preventDefault();
 
     try {
-      if (extraParams) {
-        extraParams();
-      }
+      const extras = extraParams ? extraParams() : {};
+      const dataToSend = { ...formData, ...extras };
 
-      const response = await api[method](url, formData);
+      const response = await api[method](url, dataToSend);
 
       if ([200, 201].includes(response?.data?.status)) {
         toast.success(response?.data?.message || "Ação realizada com sucesso!");
+        fetchAndUpdateData(route);
+        setIsOpen(false);
+        setFormData({});
+
         if (onSuccess) {
           onSuccess();
         }
         if (redirectTo) {
           navigate(redirectTo);
         }
-        setFormData({});
       } else {
         toast.error(response?.data?.message || "Ocorreu um erro inesperado.");
       }
@@ -60,6 +71,7 @@ const Form = ({ fields, route, redirectTo, onSuccess, extraParams }) => {
               label={field.label}
               placeholder={field.placeholder}
               id={field.name}
+              route={field.route}
             />
           </div>
         ))}
