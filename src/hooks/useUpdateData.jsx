@@ -6,7 +6,6 @@ export const useUpdateData = () => {
   const { updateData } = useData();
 
   const fetchAndUpdateData = (route, params) => {
-    console.log("aqui", route, params);
 
     let url = route;
 

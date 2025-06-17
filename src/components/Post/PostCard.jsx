@@ -1,8 +1,18 @@
 import { useEffect, useState } from "react";
 import { UPLOADS_URL } from "../../services/api";
 import InfoUsuario from "../Usuario/InfoUsuario";
+import clsx from "clsx";
 
-const PostCard = ({ titulo, conteudo, imagem, data, usuario, id }) => {
+const PostCard = ({
+  titulo,
+  conteudo,
+  imagem,
+  data,
+  usuario,
+  id,
+  isActive,
+  onClick,
+}) => {
   const [file, setFile] = useState(null);
   const [fileStatus, setFileStatus] = useState("");
 
@@ -18,7 +28,6 @@ const PostCard = ({ titulo, conteudo, imagem, data, usuario, id }) => {
 
   const hasImage = file && fileStatus !== "error";
 
-
   const formatDate = (date) => {
     const dateObj = new Date(date);
     return dateObj.toLocaleDateString("pt-BR", {
@@ -29,12 +38,17 @@ const PostCard = ({ titulo, conteudo, imagem, data, usuario, id }) => {
   };
 
   const formatContent = (conteudo) => {
-    const splitDesc = conteudo.split(" ").slice(0, 20).join(" ") + "...";
-    return splitDesc;
+    if (isActive) return conteudo;
+    return conteudo?.split(" ").slice(0, 20).join(" ") + "...";
   };
 
   return (
-    <div className="w-full bg-white border-t border-gray-200 p-4 hover:bg-gray-50 transition cursor-pointer">
+    <div
+      className={clsx("w-full bg-white border-t border-gray-200 p-4 ", {
+        "cursor-pointer hover:bg-gray-50 transition": !isActive,
+      })}
+      onClick={!isActive && onClick ? () => onClick(id) : undefined}
+    >
       <div className="flex justify-between items-start">
         <InfoUsuario nome={usuario?.nome} size="md" />
         <span className="text-xs text-gray-500">{formatDate(data)}</span>

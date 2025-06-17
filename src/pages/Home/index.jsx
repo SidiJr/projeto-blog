@@ -12,21 +12,23 @@ import PostList from "../../components/Post/PostList";
 import CategoriaList from "../../components/Categoria/CategoriaList";
 import { useEffect, useState } from "react";
 import { useUpdateData } from "../../hooks/useUpdateData";
+import PostCard from "../../components/Post/PostCard";
+import { FaArrowLeft } from "react-icons/fa";
 
 const Home = () => {
   const { user, handleLogout } = useAuth();
   const { setIsOpen } = useModal();
   const [categoriaAtiva, setCategoriaAtiva] = useState(null);
+  const [postAtivo, setPostAtivo] = useState(null);
   const routes = [{ route: "posts" }, { route: "categorias" }];
   const { data } = useData();
   useInitialData(routes);
   const { fetchAndUpdateData } = useUpdateData();
+  const [scrollPosition, setScrollPosition] = useState(0);
 
   useEffect(() => {
-    if (categoriaAtiva) {
-      fetchAndUpdateData("posts", {categoriaId: categoriaAtiva});
-    }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    fetchAndUpdateData("posts", { categoriaId: categoriaAtiva });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categoriaAtiva]);
 
   const handleClickCategoria = (id) => {
@@ -51,9 +53,39 @@ const Home = () => {
       {/* Sessão central */}
       <Section>
         <div className="flex justify-center">
-          <Button onClick={() => setIsOpen(true)}>Novo Post</Button>
+          {postAtivo ? (
+            <Button
+              onClick={() => {
+                setPostAtivo(null);
+                setTimeout(() => {
+                  window.scrollTo(0, scrollPosition);
+                }, 0);
+              }}
+            >
+              <FaArrowLeft />
+              Voltar
+            </Button>
+          ) : (
+            <Button onClick={() => setIsOpen(true)}>Novo Post</Button>
+          )}
         </div>
-        <PostList posts={data?.posts} />
+        {postAtivo ? (
+          <PostCard
+            isActive
+            titulo={postAtivo.titulo}
+            conteudo={postAtivo.conteudo}
+            imagem={postAtivo.imagem}
+            data={postAtivo.data_criacao}
+            usuario={postAtivo.usuario}
+            id={postAtivo.id}
+          />
+        ) : (
+          <PostList
+            posts={data?.posts}
+            setPostAtivo={setPostAtivo}
+            setScrollPosition={setScrollPosition}
+          />
+        )}
       </Section>
 
       {/* Sidebar direita */}

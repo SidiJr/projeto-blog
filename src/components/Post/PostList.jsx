@@ -3,7 +3,12 @@ import PostCard from "./PostCard";
 import Loading from "../Base/Loading";
 import NoData from "../Base/NoData";
 
-const PostList = ({ posts }) => {
+const PostList = ({ posts, setPostAtivo, setScrollPosition, isActive }) => {
+  const handleClickPost = (id) => {
+    setScrollPosition(window.scrollY);
+    setPostAtivo(posts.find((post) => post.id === id));
+  };
+
   return (
     <div>
       {posts?.length > 0 ? (
@@ -16,6 +21,8 @@ const PostList = ({ posts }) => {
             data={post.data_criacao}
             usuario={post.usuario}
             id={post.id}
+            onClick={handleClickPost}
+            isActive={isActive}
           />
         ))
       ) : posts?.length === 0 ? (
