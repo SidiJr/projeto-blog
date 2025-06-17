@@ -10,18 +10,24 @@ import { useInitialData } from "../../hooks/useInitialData";
 import { useData } from "../../contexts/DataContext";
 import PostList from "../../components/Post/PostList";
 import CategoriaList from "../../components/Categoria/CategoriaList";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUpdateData } from "../../hooks/useUpdateData";
 
 const Home = () => {
   const { user, handleLogout } = useAuth();
   const { setIsOpen } = useModal();
   const [categoriaAtiva, setCategoriaAtiva] = useState(null);
-  const routes = [
-    { route: "posts", params: { categoriaId: categoriaAtiva }},
-    { route: "categorias" },
-  ];
-  useInitialData(routes, categoriaAtiva);
+  const routes = [{ route: "posts" }, { route: "categorias" }];
   const { data } = useData();
+  useInitialData(routes);
+  const { fetchAndUpdateData } = useUpdateData();
+
+  useEffect(() => {
+    if (categoriaAtiva) {
+      fetchAndUpdateData("posts", {categoriaId: categoriaAtiva});
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoriaAtiva]);
 
   const handleClickCategoria = (id) => {
     setCategoriaAtiva(id);
@@ -51,8 +57,7 @@ const Home = () => {
       </Section>
 
       {/* Sidebar direita */}
-      <Sidebar>
-      </Sidebar>
+      <Sidebar></Sidebar>
 
       {/* Componente de modal */}
       <Modal title="Novo Post">

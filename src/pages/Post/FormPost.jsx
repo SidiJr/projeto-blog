@@ -1,5 +1,4 @@
 import Form from "../../components/Form/Form";
-import { useForm } from "../../contexts/FormContext";
 
 const fields = [
   {
@@ -20,30 +19,26 @@ const fields = [
     name: "imagem",
     type: "file",
     label: "Imagem",
-    required: true,
     placeholder: "Selecione a imagem do post",
   },
   {
-    name: "categoria",
-    type: "select",
+    name: "categoria_id",
+    type: "search",
     label: "Categoria",
     required: true,
     placeholder: "Selecione a categoria do post",
+    route: "categorias",
   },
-  // tem o usuario e a data, ver como colocar
 ];
 
 const FormPost = () => {
-  const { updateFormData, formData } = useForm();
-
-  const dataAtual = new Date();
-  console.log(dataAtual, formData);
+  const user = JSON.parse(localStorage.getItem("@App:user"));
 
   const extraParams = () => {
-    updateFormData("data_criacao", dataAtual);
+    return { data_criacao: new Date(), usuario_id: user.id };
   };
 
-  return <Form fields={fields} route="/posts" extraParams={extraParams} />;
+  return <Form fields={fields} route="posts" extraParams={extraParams} />;
 };
 
 export default FormPost;
