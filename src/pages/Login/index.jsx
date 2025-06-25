@@ -34,7 +34,11 @@ const Login = () => {
           {showLogin ? "Ainda não tem uma conta?" : "Já tem uma conta?"}
         </HighlightText>
 
-        <Button type="button" onClick={handleClick}>
+        <Button
+          type="button"
+          onClick={handleClick}
+          color="bg-blue-500 hover:bg-blue-700"
+        >
           {showLogin ? "Crie uma agora!" : "Faça login!"}
         </Button>
       </div>

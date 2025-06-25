@@ -31,7 +31,7 @@ const FormLogin = () => {
 
   const handleSubmit = async (e) => {
     const response = await handleLogin(e, formData);
-    if(response === "success"){
+    if (response === "success") {
       setFormData({});
     }
   };
@@ -54,7 +54,9 @@ const FormLogin = () => {
         ))}
 
         <div className="flex justify-center">
-          <Button isForm>Entrar</Button>
+          <Button isForm color="bg-blue-500 hover:bg-blue-700">
+            Entrar
+          </Button>
         </div>
       </form>
     </section>

@@ -2,29 +2,27 @@ import Section from "../../components/Base/Section";
 import Sidebar from "../../components/Base/Sidebar";
 import { useAuth } from "../../contexts/AuthContext";
 import Button from "../../components/Base/Button";
-import FormPost from "../Post/FormPost";
-import Modal from "../../components/Modal/Modal";
-import { useModal } from "../../contexts/ModalContext";
-import InfoUsuario from "../../components/Usuario/InfoUsuario";
 import { useInitialData } from "../../hooks/useInitialData";
 import { useData } from "../../contexts/DataContext";
-import PostList from "../../components/Post/PostList";
 import CategoriaList from "../../components/Categoria/CategoriaList";
 import { useEffect, useState } from "react";
 import { useUpdateData } from "../../hooks/useUpdateData";
-import PostCard from "../../components/Post/PostCard";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaGlobe, FaHome } from "react-icons/fa";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
+import { useForm } from "../../contexts/FormContext";
+import InfoUsuario from "../Usuario/InfoUsuario";
 
 const Home = () => {
   const { user, handleLogout } = useAuth();
-  const { setIsOpen } = useModal();
   const [categoriaAtiva, setCategoriaAtiva] = useState(null);
-  const [postAtivo, setPostAtivo] = useState(null);
-  const routes = [{ route: "posts" }, { route: "categorias" }];
   const { data } = useData();
-  useInitialData(routes);
   const { fetchAndUpdateData } = useUpdateData();
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { setFormData } = useForm();
+
+  const routes = [{ route: "posts" }, { route: "categorias" }];
+  useInitialData(routes);
 
   useEffect(() => {
     fetchAndUpdateData("posts", { categoriaId: categoriaAtiva });
@@ -32,70 +30,86 @@ const Home = () => {
   }, [categoriaAtiva]);
 
   const handleClickCategoria = (id) => {
+    navigate("/");
     setCategoriaAtiva(id);
+  };
+
+  const handleClickLogout = () => {
+    setFormData({});
+    handleLogout();
+    navigate("/");
+  };
+
+  const isInFormRoute = location.pathname.startsWith("/posts/form");
+  const isInPostRoute =
+    location.pathname.startsWith("/posts/") && !isInFormRoute;
+  const isUserRoute = location.pathname.startsWith("/usuario");
+  const isCategoriaRoute = location.pathname.startsWith("/categorias");
+
+  useEffect(() => {
+    if (isInFormRoute) {
+      setCategoriaAtiva(null);
+    }
+  }, [isInFormRoute]);
+
+  const handleCategoriaClick = (e) => {
+    e.stopPropagation();
+    navigate("/categorias");
   };
 
   return (
     <main className="flex justify-center w-full min-h-screen">
-      {/* Sidebar esquerda */}
       <Sidebar>
         <div className="flex flex-col items-center">
-          <InfoUsuario nome={user?.nome} size="xl" />
-          <CategoriaList
-            categorias={data?.categorias}
-            onClickCategoria={handleClickCategoria}
-            categoriaAtiva={categoriaAtiva}
-          />
-          <Button onClick={handleLogout}>Logout</Button>
+          <div
+            className="flex items-center gap-2 text-gray-700 cursor-pointer transition-colors duration-300 my-5 border-b border-gray-300 pb-4 w-full justify-center"
+            onClick={() => navigate("/")}
+          >
+            <FaGlobe className="text-4xl" />
+            <span className="font-semibold text-lg">Blog</span>
+          </div>
+          <div className="w-full flex justify-center">
+            <InfoUsuario nome={user?.nome} size="xl" id={user?.id} />
+          </div>
+          {!isUserRoute && !isCategoriaRoute && (
+            <CategoriaList
+              categorias={data?.categorias}
+              onClickCategoria={handleClickCategoria}
+              categoriaAtiva={categoriaAtiva}
+              isAdmin={false}
+            />
+          )}
+          <div className=" border-gray-300 border-t w-full py-4 flex justify-center">
+            <Button onClick={handleClickLogout} color="bg-red-500 hover:bg-red-700">Logout</Button>
+          </div>
         </div>
       </Sidebar>
 
-      {/* Sessão central */}
       <Section>
-        <div className="flex justify-center">
-          {postAtivo ? (
-            <Button
-              onClick={() => {
-                setPostAtivo(null);
-                setTimeout(() => {
-                  window.scrollTo(0, scrollPosition);
-                }, 0);
-              }}
-            >
-              <FaArrowLeft />
-              Voltar
+        <div className="flex justify-center mb-4">
+          {isInPostRoute || isInFormRoute ? (
+            <Button onClick={() => navigate("/")}>
+              <span className="flex items-center gap-1">
+                <FaHome /> Home
+              </span>
             </Button>
           ) : (
-            <Button onClick={() => setIsOpen(true)}>Novo Post</Button>
+            <Button onClick={() => navigate("/posts/form")} color="bg-green-500 hover:bg-green-700">Novo Post</Button>
           )}
         </div>
-        {postAtivo ? (
-          <PostCard
-            isActive
-            titulo={postAtivo.titulo}
-            conteudo={postAtivo.conteudo}
-            imagem={postAtivo.imagem}
-            data={postAtivo.data_criacao}
-            usuario={postAtivo.usuario}
-            id={postAtivo.id}
-          />
-        ) : (
-          <PostList
-            posts={data?.posts}
-            setPostAtivo={setPostAtivo}
-            setScrollPosition={setScrollPosition}
-          />
-        )}
+
+        <Outlet />
       </Section>
 
-      {/* Sidebar direita */}
-      <Sidebar></Sidebar>
-
-      {/* Componente de modal */}
-      <Modal title="Novo Post">
-        <FormPost />
-      </Modal>
+      <Sidebar>
+        <div className="flex justify-center mb-4">
+          {user.role === "admin" && (
+            <Button onClick={(e) => handleCategoriaClick(e)} color="bg-blue-500 hover:bg-blue-700">Categorias</Button>
+          )}
+        </div>
+      </Sidebar>
     </main>
   );
 };
+
 export default Home;

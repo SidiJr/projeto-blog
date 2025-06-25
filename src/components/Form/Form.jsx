@@ -1,20 +1,47 @@
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useForm } from "../../contexts/FormContext";
 import Input from "./Input";
 import Button from "../Base/Button";
 import api from "../../services/api";
 import { toast } from "react-toastify";
-import { useModal } from "../../contexts/ModalContext";
 import { useUpdateData } from "../../hooks/useUpdateData";
+import clsx from "clsx";
 
-const Form = ({ fields, route, redirectTo, onSuccess, extraParams }) => {
+const Form = ({ fields, route, onSuccess, extraParams, redirect }) => {
   const { id } = useParams();
   const { formData, updateFormData, setFormData } = useForm();
   const method = id ? "put" : "post";
   const url = id ? `${route}/${id}` : route;
   const navigate = useNavigate();
-  const { setIsOpen } = useModal();
   const { fetchAndUpdateData } = useUpdateData();
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await api.get(`${route}/${id}`);
+        if (response?.data?.data) {
+          const data = response.data.data;
+
+          fields.forEach((field) => {
+            updateFormData(field.name, data[field.name]);
+          });
+        }
+      } catch (error) {
+        toast.error(
+          error.response.data.message ?? "Erro ao carregar dados para edição"
+        );
+        navigate("/");
+      }
+    }
+
+    if (id) {
+      fetchData();
+    } else {
+      setFormData({});
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleChange = (e, customChange) => {
     if (e === null) {
@@ -30,23 +57,37 @@ const Form = ({ fields, route, redirectTo, onSuccess, extraParams }) => {
     e.preventDefault();
 
     try {
-      const extras = extraParams ? extraParams() : {};
-      const dataToSend = { ...formData, ...extras };
+      const extras = extraParams && !id ? extraParams() : {};
+      // const hasFile = Object.values(formData).some(
+      //   (value) => value instanceof File
+      // );
 
-      const response = await api[method](url, dataToSend);
+      const hasFile = formData?.imagem;
+
+      let response;
+
+      if (hasFile) {
+        const formDataToSend = new FormData();
+        Object.entries({ ...formData, ...extras }).forEach(([key, value]) => {
+          formDataToSend.append(key, value);
+        });
+
+        response = await api[method](url, formDataToSend, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+      } else {
+        const dataToSend = { ...formData, ...extras };
+        response = await api[method](url, dataToSend);
+      }
 
       if ([200, 201].includes(response?.data?.status)) {
         toast.success(response?.data?.message || "Ação realizada com sucesso!");
-        fetchAndUpdateData(route);
-        setIsOpen(false);
+        fetchAndUpdateData(route, {});
         setFormData({});
 
-        if (onSuccess) {
-          onSuccess();
-        }
-        if (redirectTo) {
-          navigate(redirectTo);
-        }
+        if (onSuccess) onSuccess();
+
+        navigate(redirect ?? "/");
       } else {
         toast.error(response?.data?.message || "Ocorreu um erro inesperado.");
       }
@@ -58,7 +99,7 @@ const Form = ({ fields, route, redirectTo, onSuccess, extraParams }) => {
   };
 
   return (
-    <section className="w-full max-w-2xl mx-auto p-6 bg-white">
+    <section className="w-full">
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {fields.map((field) => (
           <div key={field.name} className="w-full">
@@ -77,7 +118,16 @@ const Form = ({ fields, route, redirectTo, onSuccess, extraParams }) => {
         ))}
 
         <div className="flex justify-center">
-          <Button isForm>{id ? "Atualizar" : "Salvar"}</Button>
+          <Button
+            isForm
+            color={clsx(
+              id
+                ? "bg-blue-500 hover:bg-blue-700"
+                : "bg-green-500 hover:bg-green-700"
+            )}
+          >
+            {id ? "Atualizar" : "Salvar"}
+          </Button>
         </div>
       </form>
     </section>

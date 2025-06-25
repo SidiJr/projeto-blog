@@ -4,7 +4,6 @@ import "./App.css";
 import { ToastContainer } from "react-toastify";
 import { AuthProvider } from "./contexts/AuthContext";
 import { FormProvider } from "./contexts/FormContext";
-import { ModalProvider } from "./contexts/ModalContext";
 import { DataProvider } from "./contexts/DataContext";
 
 function App() {
@@ -13,11 +12,9 @@ function App() {
       <ToastContainer />
       <AuthProvider>
         <DataProvider>
-          <ModalProvider>
-            <FormProvider>
-              <Routes />
-            </FormProvider>
-          </ModalProvider>
+          <FormProvider>
+            <Routes />
+          </FormProvider>
         </DataProvider>
       </AuthProvider>
     </>
