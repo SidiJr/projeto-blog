@@ -11,6 +11,7 @@ import { FaGlobe, FaHome } from "react-icons/fa";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { useForm } from "../../contexts/FormContext";
 import InfoUsuario from "../Usuario/InfoUsuario";
+import Chat from "../../components/Chat/Chat";
 
 const Home = () => {
   const { user, handleLogout } = useAuth();
@@ -80,7 +81,12 @@ const Home = () => {
             />
           )}
           <div className=" border-gray-300 border-t w-full py-4 flex justify-center">
-            <Button onClick={handleClickLogout} color="bg-red-500 hover:bg-red-700">Logout</Button>
+            <Button
+              onClick={handleClickLogout}
+              color="bg-red-500 hover:bg-red-700"
+            >
+              Logout
+            </Button>
           </div>
         </div>
       </Sidebar>
@@ -94,7 +100,12 @@ const Home = () => {
               </span>
             </Button>
           ) : (
-            <Button onClick={() => navigate("/posts/form")} color="bg-green-500 hover:bg-green-700">Novo Post</Button>
+            <Button
+              onClick={() => navigate("/posts/form")}
+              color="bg-green-500 hover:bg-green-700"
+            >
+              Novo Post
+            </Button>
           )}
         </div>
 
@@ -104,8 +115,16 @@ const Home = () => {
       <Sidebar>
         <div className="flex justify-center mb-4">
           {user.role === "admin" && (
-            <Button onClick={(e) => handleCategoriaClick(e)} color="bg-blue-500 hover:bg-blue-700">Categorias</Button>
+            <Button
+              onClick={(e) => handleCategoriaClick(e)}
+              color="bg-blue-500 hover:bg-blue-700"
+            >
+              Categorias
+            </Button>
           )}
+        </div>
+        <div>
+          <Chat />
         </div>
       </Sidebar>
     </main>
