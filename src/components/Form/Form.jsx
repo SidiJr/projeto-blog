@@ -58,10 +58,6 @@ const Form = ({ fields, route, onSuccess, extraParams, redirect }) => {
 
     try {
       const extras = extraParams && !id ? extraParams() : {};
-      // const hasFile = Object.values(formData).some(
-      //   (value) => value instanceof File
-      // );
-
       const hasFile = formData?.imagem;
 
       let response;
